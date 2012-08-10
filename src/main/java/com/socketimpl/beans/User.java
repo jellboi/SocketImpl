@@ -1,33 +1,29 @@
 package com.socketimpl.beans;
 
-public class User {
+public class User extends BaseEntity {
 
-	private String displayName;
-	
 	private String fullName;
 	private String emailId;
+	
+	private String displayName;
 	
 	
 	/* Constructors */
 	
-	public User(String displayName, String fullName, String emailId) {
+	public User(String emailId) {
 		super();
-		this.displayName = displayName;
-		this.fullName = fullName;
 		this.emailId = emailId;
 	}
 	
-	
+	public User(String fullName, String emailId, String displayName) {
+		super();
+		this.fullName = fullName;
+		this.emailId = emailId;
+		this.displayName = displayName;
+	}
 	
 	/* Getters and Setters */
 
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
 
 	public String getFullName() {
 		return fullName;
@@ -44,5 +40,15 @@ public class User {
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
+	
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	
 
 }
