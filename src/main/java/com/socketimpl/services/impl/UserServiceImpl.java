@@ -85,7 +85,8 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
-	
+
+	/* Getters and Setters */
 
 }
 

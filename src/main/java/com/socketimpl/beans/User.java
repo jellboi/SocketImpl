@@ -10,6 +10,10 @@ public class User extends BaseEntity {
 	
 	/* Constructors */
 	
+	public User() {
+		super();
+	}
+	
 	public User(String emailId) {
 		super();
 		this.emailId = emailId;
