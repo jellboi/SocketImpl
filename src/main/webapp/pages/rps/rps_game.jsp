@@ -15,8 +15,8 @@
 	
 	    var ws = null;
 	
-		var rps_game_url = 'ws://localhost:8080/SocketImpl/game/rps/play?gameId=' + gameId + '&emailId=' + emailId;
-// 		var rps_game_url = 'ws://10.42.43.1:8080/SocketImpl/game/rps/play?gameId=' + gameId + '&emailId=' + emailId;
+// 		var rps_game_url = 'ws://localhost:8080/SocketImpl/game/rps/play?gameId=' + gameId + '&emailId=' + emailId;
+		var rps_game_url = 'ws://192.168.6.118:8080/SocketImpl/game/rps/play?gameId=' + gameId + '&emailId=' + emailId;
 
 		/* Game realated Variables  */
 		
@@ -65,11 +65,12 @@
 
 					function countDownTimer() {
 						count = count - 1;
+						
+						$("#count-down-secs").html('<span class="count">' + count + '</span>');
 						if (count <= 0) {
 							clearInterval(counter);
 							return;
 						}
-						$("#count-down-secs").html('<span class="count">' + count + '</span>');
 					}
 					
 					$('#status-cont').html('<label > Pick Your Symbol !!! </label>').show();
@@ -80,6 +81,7 @@
 					var result = msg.substring(7);
 					clearInterval(counter);
 					showResult(result);
+					updateScores(result);
 					
 					$('#status-cont').hide();
 					$('#start-btn').show();
@@ -115,6 +117,25 @@
 						break;
 				}
 				
+			}
+		};
+		
+		function updateScores(result) {
+			if(result) {
+				var leftPlayerScoreElem = $('#left-player-score');
+				var rightPlayerScoreElem = $('#right-player-score');
+				switch (result) {
+					case "TIE":
+						break;
+					case "WON":
+						leftPlayerScoreElem.html( parseInt(leftPlayerScoreElem.html()) + 1 );
+						break;
+					case "LOST":
+						rightPlayerScoreElem.html( parseInt(rightPlayerScoreElem.html()) + 1 );
+						break;
+					default:
+						break;
+				}
 			}
 		};
 		
@@ -173,8 +194,9 @@
 		
 		function sendMessage() {
 			if (ws != null) {
-				var message = document.getElementById('my-message').value;
-				ws.send("MSG:" + message);
+				var messageCont =$('#my-message');
+				ws.send("MSG:" + messageCont.val());
+				messageCont.val('');
 			} 
 		};
 		
@@ -185,7 +207,7 @@
 				$('#start-btn').hide();
 				$('#status-cont').html('<label > Waiting for the other player !!! </label>').show();
 				$("#count-down-secs").html('');
-				$('.player-choice img').attr('src', '');
+				$('.player-choice img').attr('src', ' ');
 			} 
 		};
 		
@@ -215,6 +237,24 @@
 		
 		$(document).ready(function(){
 			connect();
+			
+			var chatMsgCont = $('#my-message');
+			chatMsgCont.live("keyup", function(event){
+				if(event.keyCode == '13'){
+					
+					event.eventBubble = false;
+				    if (event.stopPropagation) {   
+				    	event.stopPropagation();
+				    	event.preventDefault();
+				    }
+				    
+				    var chatMsg = chatMsgCont.val();
+				    if(chatMsg && chatMsg != '') {
+				    	sendMessage();			    	
+				    }
+				}
+			});
+			
 		});
 		
 	</script>
@@ -288,13 +328,13 @@
 									</div>
 									
 									<div id="rps-scores-cont" class="float-fix">
-										<div class="float-left">
-											<label class="clear bold margin-5px">Player 1</label>
-											<label class="clear bold margin-5px">5 wins</label>
+										<div class="float-left" >
+											<label class="clear bold margin-5px">Your Score</label>
+											<label class="clear bold margin-5px"><span id="left-player-score">0</span> wins</label>
 										</div>
 										<div class="float-right">
-											<label class="clear bold margin-5px">Player 2</label>
-											<label class="clear bold margin-5px">4 wins</label>									
+											<label class="clear bold margin-5px">Opponent Score</label>
+											<label class="clear bold margin-5px"><span id="right-player-score">0</span> wins</label>									
 										</div>									
 									</div>
 								
